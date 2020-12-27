@@ -24,6 +24,9 @@
   Git reopo created 27dec2020   : Dick van Kalsbeek
 
 */
+//remote reset, handle with care!
+void(* resetSoftware)(void) = 0;
+
 //libraries
 #include <SoftwareSerial.h>
 #include <TinyGPS++.h>
@@ -246,7 +249,7 @@ void HandleSerialCommand(String a_inputString)
   else if (a_inputString.indexOf("Reset") >= 0)
   {
     Serial.println("Remote resetting the Arduino, wait..");
-    //resetSoftware();
+    resetSoftware();
   }
   else
   {
