@@ -1,3 +1,5 @@
+
+
 /*
   MEGA2560 VERSION!
 
@@ -23,8 +25,8 @@
 
 */
 //libraries
-#include <TinyGPS++.h>
 #include <SoftwareSerial.h>
+#include <TinyGPS++.h>
 #include <SPI.h>
 #include <Ethernet.h>
 #include <SD.h>
@@ -182,9 +184,74 @@ void InitSdCard()
   Serial.println("SD card: ready");
 }
 
-void SerialEvent()
+void serialEvent()
 {
+  //REMARK: reserved Arduino function name!
+  String m_inputString;
+  char m_char;
 
+  //Serialprintln("Command received!");
+
+  while (Serial.available())
+  {
+    m_char = Serial.read();
+    delay(1);
+    m_inputString = m_inputString + m_char;
+  }
+
+  if (m_inputString != "")
+  {
+    Serial.println("Command received in Arduino is: " + m_inputString);
+
+    HandleSerialCommand(m_inputString);
+  }
+}
+
+void HandleSerialCommand(String a_inputString)
+{
+  //split commands with IndexOf and substring function
+  //test with TEST_yourowntext
+  String m_remainingString = "";
+  int m_startIndexOfMessage = 0;
+  int m_inputStringLength = 0;
+
+  m_inputStringLength = a_inputString.length();
+
+  if (a_inputString.indexOf("TEST_") >= 0)
+  {
+    m_startIndexOfMessage = a_inputString.indexOf("_") + 1;
+    Serial.println("Start index of real message is : " + (String)m_startIndexOfMessage);
+
+    m_remainingString = a_inputString.substring(m_startIndexOfMessage, m_inputStringLength);
+    Serial.println("Stripped command is : " + (String)m_remainingString);
+  }
+  else if (a_inputString.indexOf("SP2_") >= 0)
+  {
+    m_startIndexOfMessage = a_inputString.indexOf("_") + 1;
+    Serial.println("Start index of real message is : " + (String)m_startIndexOfMessage);
+
+    m_remainingString = a_inputString.substring(m_startIndexOfMessage, m_inputStringLength);
+    Serial.println("Stripped command is : " + (String)m_remainingString);
+
+    Serial1.println(m_remainingString);
+  }
+  else if (a_inputString.indexOf("Test") >= 0)
+  {
+
+  }
+  else if (a_inputString.indexOf("Int") >= 0)
+  {
+
+  }
+  else if (a_inputString.indexOf("Reset") >= 0)
+  {
+    Serial.println("Remote resetting the Arduino, wait..");
+    //resetSoftware();
+  }
+  else
+  {
+    Serial.println("Command not recognized..");
+  }
 }
 
 void loop()
