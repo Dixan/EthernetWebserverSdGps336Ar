@@ -366,17 +366,17 @@ void SdCardWebSite(EthernetClient client)
       //m_row = webFile.readString();
       //Serial.print(m_row);
       //
-      //      if (m_row.indexOf("objGps.time.value()") > 0)
-      //      {
-      //        //Serial.println("Time tage found");
-      //        m_actualValue = (String)objGps.time.value();
-      //      }
-      //
-      //      if (m_row.indexOf("objGps.satellites.value()") > 0)
-      //      {
-      //        //Serial.println("Satellite tag found");
-      //        m_actualValue = (String)objGps.satellites.value();
-      //      }
+      if (m_row.indexOf("objGps.time.value()") > 0)
+      {
+        //Serial.println("Time tage found");
+        m_actualValue = (String)objGps.time.value();
+      }
+
+      if (m_row.indexOf("objGps.satellites.value()") > 0)
+      {
+        //Serial.println("Satellite tag found");
+        m_actualValue = (String)objGps.satellites.value();
+      }
 
       client.print(m_row + " " + m_actualValue); //beetje wazig.. ik krijg in de serial steeds een lege regel
 
