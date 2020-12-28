@@ -294,7 +294,8 @@ void UpdateWebServer()
           }
           else
           {
-            SdCardWebSite(client);
+            //SdCardWebSite(client);
+            SendJsonData(client);
           }
 
           break;
@@ -416,6 +417,34 @@ void HardCodedWebSite(EthernetClient client)
   client.println(objGps.satellites.value());
 
   client.println("</html>");
+}
+
+void FormatGpsValuesToJsonData()
+{
+  gpsData.fixTimeHhMmSsCc = objGps.time.value();
+  gpsData.fixLatitude = objGps.location.lat();
+  gpsData.fixLongitude = objGps.location.lng();
+  gpsData.fixAltitude = objGps.altitude.meters();
+  gpsData.fixNrOfSatellites = objGps.satellites.value();
+}
+
+void SendJsonData(EthernetClient client)
+{
+  FormatGpsValuesToJsonData();
+
+  //set header for JSON data
+//  client.println();
+//  client.println("<!DOCTYPE HTML>");
+//  client.println("<html>");
+//  client.print("JSON test:");
+//  client.println("</html>");
+
+  client.println("Content-Type: application/json; charset=UTF-8");
+  client.print("{");
+  client.print("\"Altitude\":" + gpsData.fixAltitude);
+  client.print(",");
+  client.print("\"Latitude\":" + gpsData.fixLatitude);
+  client.print("}");
 }
 
 void SdCardWebSite(EthernetClient client)
